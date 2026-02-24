@@ -763,6 +763,9 @@ function sendsms_helper($username, $sms_to, $message, $sms_type = 'text', $unico
 	$user = $user_config;
 	if ($username && isset($user['username']) && $user['username'] != $username) {
 		$user = user_getdatabyusername($username);
+	} else if ($username) {
+		$user = user_getdatabyusername($username);
+		$user_config = $user;
 	}
 
 	// user must exists

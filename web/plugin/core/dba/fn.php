@@ -113,10 +113,13 @@ function _dba_execute($pdo_statement, $db_argv = [])
 		} else {
 			$ret = $pdo_statement->execute();
 		}
-
 	} catch (PDOException $e) {
 		//_log(_('Exception') . ': ' . $e->getMessage() . ' q:' . $pdo_statement->queryString . ' argv:' . print_r($db_argv, true) . ' ip:' . _REMOTE_ADDR_, 2, '_dba_execute');
-		_log(_('Exception') . ': ' . $e->getMessage() . ' ip:' . _REMOTE_ADDR_, 2, '_dba_execute');
+		_log(
+			_('Exception') . ': ' . $e->getMessage() . ' ip:' . _REMOTE_ADDR_,
+			2,
+			'_dba_execute'
+		);
 		die(_('FATAL ERROR') . ' : ' . _('Database query execution has failed'));
 	}
 
