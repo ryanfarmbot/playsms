@@ -43,7 +43,7 @@ if ($remote_smslog_id && $status && ($status != 'received')) {
 		$p_status = $data['p_status'];
 		switch ($status) {
 			case "delivered":
-				$p_status = 1;
+				$p_status = 3;
 				break; // delivered
 			default:
 				$p_status = 2;
