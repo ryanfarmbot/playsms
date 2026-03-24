@@ -78,6 +78,7 @@ The GPLv3 full text is included in file [LICENSE.md](LICENSE.md)
 
 Please read [INSTALL](INSTALL.md "playSMS installation document").
 
+If you're using Docker, please read [docker/README.MD](docker/README.md)
 
 ## Project Founder and Maintainer
 

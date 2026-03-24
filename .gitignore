@@ -36,3 +36,5 @@ install.conf.backup
 
 nbproject/*
 gentestsms.php
+
+.env
