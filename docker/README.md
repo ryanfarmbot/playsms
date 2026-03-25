@@ -1,6 +1,6 @@
 # playSMS Docker stack
 
-This directory mirrors [docker-playsms](https://github.com/playsms/docker-playsms): MariaDB, PHP-FPM playSMS app container, and nginx with TLS. The application source is copied from this repository into the image at build time (`/usr/src/playsms`) instead of cloning from Git at runtime.
+This directory mirrors [docker-playsms](https://github.com/playsms/docker-playsms): MariaDB, PHP-FPM playSMS app container, and nginx with TLS. The application source is copied from this repository into the image at build time (`/home/playsms/src`) instead of cloning from Git at runtime.
 
 
 docker-playsms

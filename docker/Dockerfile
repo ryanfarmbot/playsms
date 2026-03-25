@@ -44,9 +44,9 @@ COPY docker/playsms/runner_playsmsd.sh /runner_playsmsd.sh
 COPY docker/playsms/docker-setup.sh /_docker-setup.sh
 COPY docker/playsms/healthcheck.sh /usr/bin/healthcheck.sh
 
-COPY . /usr/src/playsms
+COPY . /home/playsms/src
 
-RUN chown playsms:playsms -R /_docker-setup.sh /etc/php83 /usr/src/playsms && \
+RUN chown playsms:playsms -R /_docker-setup.sh /etc/php83 /home/playsms/src && \
 	chmod 0755 /run.sh /runner_php-fpm.sh /runner_playsmsd.sh /usr/bin/healthcheck.sh && \
 	chmod 0644 /_docker-setup.sh && \
 	chmod 0777 -R /var/log

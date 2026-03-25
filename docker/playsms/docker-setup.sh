@@ -11,7 +11,6 @@ PATHLIB="/home/playsms/lib"
 PATHBIN="/home/playsms/bin"
 PATHLOG="/home/playsms/log"
 PATHCONF="/home/playsms/etc"
-PATHSRC_IMAGE="/usr/src/playsms"
 
 echo
 echo "=================================================================="
@@ -24,7 +23,7 @@ echo "MySQL database      = $MYSQL_DBNAME"
 echo "MySQL host          = $MYSQL_HOST"
 echo "MySQL port          = $MYSQL_TCP_PORT"
 echo
-echo "playSMS source path = $PATHSRC (from image $PATHSRC_IMAGE)"
+echo "playSMS source path = $PATHSRC"
 echo
 echo "playSMS web path    = $PATHWEB"
 echo "playSMS lib path    = $PATHLIB"
@@ -37,8 +36,7 @@ echo "=================================================================="
 echo
 INSTALLED=0 &&
 mkdir -p $PATHCONF $PATHBIN $PATHLIB $PATHLOG $PATHWEB &&
-cp -r $PATHSRC_IMAGE $PATHSRC &&
-cd $PATHSRC &&
+cd $PATHSRC && # Contents of $PATHSRC are copied into the image at build time
 ./getcomposer.sh &&
 cp -rR -f web/* $PATHWEB/ &&
 cp -f web/config-dist.php $PATHWEB/config.php &&
