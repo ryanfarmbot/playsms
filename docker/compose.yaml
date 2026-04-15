@@ -87,6 +87,13 @@ services:
     restart:
       unless-stopped
 
+  nginx.ecs:
+    container_name: "playsms.nginx.ecs"
+    image: ${DOCKER_IMAGE_NGINX_ECS}
+    build:
+      context: ..
+      dockerfile: docker/nginx.Dockerfile
+
 networks:
   playsms-network:
     driver: bridge
