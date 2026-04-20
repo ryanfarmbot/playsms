@@ -1,5 +1,7 @@
 <?php
 
+use Twilio\Security\RequestValidator;
+
 /**
  * This file is part of playSMS.
  *
@@ -32,6 +34,44 @@ $remote_smslog_id = isset($_REQUEST['SmsSid'])
 	? preg_replace('/[^a-zA-Z0-9]/', '', (string) $_REQUEST['SmsSid']) // Replace all non-alphanumeric characters with an empty string
 	: '';
 $status = isset($_REQUEST['SmsStatus']) ? trim((string) $_REQUEST['SmsStatus']) : '';
+
+$authToken = $plugin_config['twilio']['auth_token'];
+$signature = isset($_SERVER['HTTP_X_TWILIO_SIGNATURE'])
+	? $_SERVER['HTTP_X_TWILIO_SIGNATURE']
+	: '';
+
+// Behind a TLS-terminating proxy (e.g. AWS ALB) $_SERVER['HTTPS'] is unset
+// even though Twilio called the webhook over HTTPS. Trust the standard
+// X-Forwarded-* headers set by the load balancer when present.
+$protocol = 'http';
+if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+	$protocol = strtolower(trim(explode(',', $_SERVER['HTTP_X_FORWARDED_PROTO'])[0]));
+} elseif (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+	$protocol = 'https';
+}
+
+$host = !empty($_SERVER['HTTP_X_FORWARDED_HOST'])
+	? trim(explode(',', $_SERVER['HTTP_X_FORWARDED_HOST'])[0])
+	: (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
+
+$requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+$url = $protocol . '://' . $host . $requestUri;
+
+$validator = new RequestValidator($authToken);
+
+// playSMS' web/init.php mutates $_POST before this script runs and
+// injects a "__SAFEHTML__" key (a sanitized mirror of the array)
+$postVars = $_POST;
+unset($postVars[_SAFE_HTML_KEY_]);
+
+if (!$validator->validate($signature, $url, $postVars)) {
+	_log(
+		"invalid Twilio request remote_smslog_id: " . $remote_smslog_id . " status: " . $status,
+		2,
+		_CALLBACK_GATEWAY_LOG_MARKER_
+	);
+	exit();
+}
 
 // delivery receipt
 if (
